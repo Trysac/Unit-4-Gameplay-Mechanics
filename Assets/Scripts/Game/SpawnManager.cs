@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 
 namespace RingOut.Game
 {
-    /// <summary>Sends the next wave, with a power-up, once every enemy has fallen off.</summary>
+    /// <summary>Sends the next wave, and a power-up if none is waiting, once every enemy has fallen off.</summary>
     public class SpawnManager : MonoBehaviour
     {
         [FormerlySerializedAs("enemyPrefb")]
@@ -21,7 +21,11 @@ namespace RingOut.Game
             enemiesCount = FindObjectsByType<Enemy>(FindObjectsSortMode.None).Length;
             if (enemiesCount == 0)
             {
-                Instantiate(powerupPrefab, RandomSpawnPosition(), powerupPrefab.transform.rotation);
+                // One power-up waits on the island at a time; unclaimed ones do not pile up.
+                if (GameObject.FindGameObjectsWithTag("PowerUp").Length == 0)
+                {
+                    Instantiate(powerupPrefab, RandomSpawnPosition(), powerupPrefab.transform.rotation);
+                }
                 waveNumber++;
                 SpawnWave(waveNumber);
             }

@@ -70,5 +70,24 @@ namespace RingOut.Tests
             Assert.That(player.HasPowerUp, Is.False, "8.5 s in, the second power-up has run out");
             Assert.That(IndicatorShown, Is.False);
         }
+
+        [UnityTest]
+        public IEnumerator PowerUpsThatNobodyPicksUpDoNotPileUpWaveAfterWave()
+        {
+            yield return Load();
+            var body = player.GetComponent<Rigidbody>();
+            body.isKinematic = true;
+            player.transform.position = new Vector3(0f, 40f, 0f);
+
+            for (int i = 0; i < 3; i++)
+            {
+                Clear("Enemy");
+                yield return null;
+                yield return null;
+            }
+
+            Assert.That(spawner.Wave, Is.EqualTo(4));
+            Assert.That(GameObject.FindGameObjectsWithTag("PowerUp").Length, Is.EqualTo(1));
+        }
     }
 }
