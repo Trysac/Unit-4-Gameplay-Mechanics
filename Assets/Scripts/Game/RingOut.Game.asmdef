@@ -2,7 +2,8 @@
     "name": "RingOut.Game",
     "rootNamespace": "RingOut.Game",
     "references": [
-        "RingOut.Core"
+        "RingOut.Core",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
