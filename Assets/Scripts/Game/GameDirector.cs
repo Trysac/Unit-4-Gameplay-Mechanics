@@ -219,6 +219,9 @@ namespace RingOut.Game
         void ShowResults()
         {
             Screen = GameScreen.Results;
+            // A hit-stop still running when the run ends must not leave the results in slow motion.
+            hitStop = 0f;
+            Time.timeScale = 1f;
             sound.SetDucked(true);
             ShowResultsMenu(0);
         }
