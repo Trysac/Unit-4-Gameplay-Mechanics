@@ -22,7 +22,11 @@ namespace RingOut.Game
             {
                 Destroy(gameObject);
             }
+        }
 
+        // Forces go in the physics step: added every rendered frame, they scaled with the frame rate.
+        void FixedUpdate()
+        {
             Vector3 lookDirection = (player.position - transform.position).normalized;
             body.AddForce(lookDirection * speed);
         }

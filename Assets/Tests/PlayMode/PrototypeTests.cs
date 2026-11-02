@@ -89,5 +89,49 @@ namespace RingOut.Tests
             Assert.That(spawner.Wave, Is.EqualTo(4));
             Assert.That(GameObject.FindGameObjectsWithTag("PowerUp").Length, Is.EqualTo(1));
         }
+
+        [UnityTest]
+        public IEnumerator EnemiesChaseAtTheSameSpeedAtAnyFrameRate()
+        {
+            yield return Load();
+            spawner.enabled = false;
+            Clear("PowerUp");
+            Enemy[] enemies = Object.FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+            Assert.That(enemies.Length, Is.EqualTo(1));
+            Enemy enemy = enemies[0];
+            player.GetComponent<Rigidbody>().isKinematic = true;
+            // Off the ground, without gravity or spin: only the chasing force moves it.
+            var body = enemy.GetComponent<Rigidbody>();
+            body.useGravity = false;
+            body.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
+
+            float slow = 0f;
+            yield return Chase(enemy, 30, distance => slow = distance);
+            float fast = 0f;
+            yield return Chase(enemy, 150, distance => fast = distance);
+
+            Assert.That(slow, Is.GreaterThan(0.5f));
+            Assert.That(fast / slow, Is.InRange(0.85f, 1.15f), $"rolled {slow:0.00} m at 30 fps and {fast:0.00} m at 150 fps");
+        }
+
+        /// <summary>Rolls the enemy towards the player for one game second at a fixed frame rate.</summary>
+        IEnumerator Chase(Enemy enemy, int framesPerSecond, System.Action<float> rolled)
+        {
+            var body = enemy.GetComponent<Rigidbody>();
+            Vector3 player = this.player.transform.position;
+            var start = new Vector3(player.x + 4f, player.y + 3f, player.z);
+            body.position = start;
+            enemy.transform.position = start;
+            body.linearVelocity = Vector3.zero;
+            body.angularVelocity = Vector3.zero;
+            Time.captureFramerate = framesPerSecond;
+            yield return new WaitForFixedUpdate();
+            for (int i = 0; i < framesPerSecond; i++)
+            {
+                yield return null;
+            }
+            Time.captureFramerate = 0;
+            rolled(start.x - body.position.x);
+        }
     }
 }

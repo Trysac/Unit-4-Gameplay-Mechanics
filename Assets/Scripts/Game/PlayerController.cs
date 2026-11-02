@@ -17,6 +17,7 @@ namespace RingOut.Game
         readonly PowerUpTimer powerUp = new PowerUpTimer();
         Rigidbody body;
         Transform focalPoint;
+        float forwardInput;
 
         public bool HasPowerUp => hasPowerUp;
 
@@ -30,8 +31,7 @@ namespace RingOut.Game
 
         void Update()
         {
-            float forwardInput = Input.GetAxis("Vertical");
-            body.AddForce(focalPoint.forward * forwardInput * speed);
+            forwardInput = Input.GetAxis("Vertical");
 
             if (powerUp.Step(Time.deltaTime))
             {
@@ -43,6 +43,11 @@ namespace RingOut.Game
             {
                 powerUpIndicator.transform.rotation = Quaternion.Euler(Vector3.zero);
             }
+        }
+
+        void FixedUpdate()
+        {
+            body.AddForce(focalPoint.forward * forwardInput * speed);
         }
 
         void OnTriggerEnter(Collider other)
