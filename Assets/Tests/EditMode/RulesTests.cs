@@ -31,5 +31,31 @@ namespace RingOut.Core.Tests
             Assert.That(impulse.Z, Is.LessThan(0f));
             Assert.That(impulse.X, Is.EqualTo(0f));
         }
+
+        [Test]
+        public void KnockbackHasTheSameStrengthAtAnyDistance()
+        {
+            Vec3 touching = Push.Knockback(Vec3.Zero, new Vec3(1.5f, 0f, 0f), 10f);
+            Vec3 overlapping = Push.Knockback(Vec3.Zero, new Vec3(0.5f, 0f, 0f), 10f);
+
+            Assert.That(touching.Length, Is.EqualTo(10f).Within(1e-4f));
+            Assert.That(overlapping.Length, Is.EqualTo(10f).Within(1e-4f));
+        }
+
+        [Test]
+        public void KnockbackStaysOnTheGround()
+        {
+            Vec3 impulse = Push.Knockback(new Vec3(0f, 0.5f, 0f), new Vec3(1f, -0.3f, 1f), 10f);
+
+            Assert.That(impulse.Y, Is.EqualTo(0f), "an enemy a little lower is pushed out, not into the ground");
+            Assert.That(impulse.Length, Is.EqualTo(10f).Within(1e-4f));
+            Assert.That(impulse.X, Is.EqualTo(impulse.Z).Within(1e-4f));
+        }
+
+        [Test]
+        public void KnockbackOfTwoBodiesAtTheSameSpotIsZero()
+        {
+            Assert.That(Push.Knockback(Vec3.Zero, Vec3.Zero, 10f), Is.EqualTo(Vec3.Zero));
+        }
     }
 }
