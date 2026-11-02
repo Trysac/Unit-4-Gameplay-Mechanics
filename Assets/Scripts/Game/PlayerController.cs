@@ -1,4 +1,3 @@
-using System.Collections;
 using RingOut.Core;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -15,6 +14,7 @@ namespace RingOut.Game
         [FormerlySerializedAs("porwerUpIndicator")]
         [SerializeField] GameObject powerUpIndicator;
 
+        readonly PowerUpTimer powerUp = new PowerUpTimer();
         Rigidbody body;
         Transform focalPoint;
 
@@ -33,6 +33,12 @@ namespace RingOut.Game
             float forwardInput = Input.GetAxis("Vertical");
             body.AddForce(focalPoint.forward * forwardInput * speed);
 
+            if (powerUp.Step(Time.deltaTime))
+            {
+                powerUpIndicator.SetActive(false);
+                hasPowerUp = false;
+            }
+
             if (powerUpIndicator.activeSelf)
             {
                 powerUpIndicator.transform.rotation = Quaternion.Euler(Vector3.zero);
@@ -43,7 +49,9 @@ namespace RingOut.Game
         {
             if (other.CompareTag("PowerUp"))
             {
-                StartCoroutine(PowerUpCountdown());
+                powerUp.Grant(powerUpDuration);
+                hasPowerUp = true;
+                powerUpIndicator.SetActive(true);
                 Destroy(other.gameObject);
             }
         }
@@ -56,15 +64,6 @@ namespace RingOut.Game
                 Vec3 impulse = Push.Knockback(ToVec(transform.position), ToVec(collision.transform.position), repulseForceWithPowerUp);
                 enemyBody.AddForce(new Vector3(impulse.X, impulse.Y, impulse.Z), ForceMode.Impulse);
             }
-        }
-
-        IEnumerator PowerUpCountdown()
-        {
-            hasPowerUp = true;
-            powerUpIndicator.SetActive(true);
-            yield return new WaitForSeconds(powerUpDuration);
-            powerUpIndicator.SetActive(false);
-            hasPowerUp = false;
         }
 
         static Vec3 ToVec(Vector3 v) => new Vec3(v.x, v.y, v.z);
