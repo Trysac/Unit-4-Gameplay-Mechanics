@@ -1,0 +1,67 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="root" class="hud" picking-mode="Ignore">
+        <ui:VisualElement name="play-hud" class="layer" picking-mode="Ignore">
+            <ui:VisualElement name="floaters" class="layer" picking-mode="Ignore" />
+            <ui:VisualElement class="top-bar" picking-mode="Ignore">
+                <ui:VisualElement class="score-block" picking-mode="Ignore">
+                    <ui:Label class="caption" text="SCORE" picking-mode="Ignore" />
+                    <ui:Label name="score" class="display score" text="0" picking-mode="Ignore" />
+                    <ui:VisualElement class="chain-row" picking-mode="Ignore">
+                        <ui:Label name="chain" class="chain" text="" picking-mode="Ignore" />
+                        <ui:VisualElement class="chain-bar" picking-mode="Ignore">
+                            <ui:VisualElement name="chain-fill" class="chain-bar__fill" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="center-block" picking-mode="Ignore">
+                    <ui:Label name="wave" class="display wave" text="WAVE 1" picking-mode="Ignore" />
+                    <ui:Label name="enemies" class="enemies" text="1 ENEMY LEFT" picking-mode="Ignore" />
+                    <ui:Label name="arena" class="tag" text="THE DISC" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement class="best-block" picking-mode="Ignore">
+                    <ui:VisualElement class="best-row" picking-mode="Ignore">
+                        <ui:VisualElement class="best-text" picking-mode="Ignore">
+                            <ui:Label class="caption caption--right" text="BEST" picking-mode="Ignore" />
+                            <ui:Label name="best" class="display best" text="0" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="pause-button" class="pause-button">
+                            <ui:VisualElement class="pause-button__bar" picking-mode="Ignore" />
+                            <ui:VisualElement class="pause-button__bar" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="bottom-bar" picking-mode="Ignore">
+                <ui:VisualElement name="powers" class="powers" picking-mode="Ignore" />
+                <ui:VisualElement class="action-meter" picking-mode="Ignore">
+                    <ui:VisualElement name="action-fill" class="action-meter__fill" picking-mode="Ignore" />
+                    <ui:Label name="action" class="action" text="DASH" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:Label name="prompt" class="prompt" text="" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="stick" class="stick hidden" picking-mode="Ignore">
+                <ui:VisualElement name="stick-knob" class="stick__knob" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="touch-button" class="touch-button hidden" picking-mode="Ignore">
+                <ui:Label name="touch-button-label" class="display touch-button__label" text="DASH" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:Label name="banner" class="display banner" picking-mode="Ignore" />
+            <ui:Label name="banner-sub" class="banner-sub" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement name="menu" class="layer menu" picking-mode="Ignore">
+            <ui:VisualElement name="menu-dim" class="layer menu__dim" picking-mode="Ignore" />
+            <ui:VisualElement class="menu__column" picking-mode="Ignore">
+                <ui:VisualElement name="logo" class="logo" picking-mode="Ignore">
+                    <ui:Label class="display logo__word logo__word--ring" text="RING" picking-mode="Ignore" />
+                    <ui:Label class="display logo__word logo__word--out" text="OUT" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:Label name="menu-title" class="display menu__title" picking-mode="Ignore" />
+                <ui:Label name="menu-subtitle" class="menu__subtitle" picking-mode="Ignore" />
+                <ui:VisualElement name="menu-body" class="menu__body" picking-mode="Ignore" />
+                <ui:VisualElement name="menu-items" class="menu__items" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:Label name="menu-hint" class="menu__hint" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:Label name="sound" class="sound" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>
