@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         enemyRb = GetComponent<Rigidbody>();
-        player = FindObjectOfType<PlayerController>().gameObject.transform;
+        player = FindFirstObjectByType<PlayerController>().gameObject.transform;
     }
 
 

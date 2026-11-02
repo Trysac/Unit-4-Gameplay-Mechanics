@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
         porwerUpIndicator.SetActive(false);
         hasPowerUp = false;
         myRigidbody = GetComponent<Rigidbody>();
-        focalPoint = FindObjectOfType<RotateCamera>().gameObject.transform;
+        focalPoint = FindFirstObjectByType<RotateCamera>().gameObject.transform;
     }
 
     void Update()

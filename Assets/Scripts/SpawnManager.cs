@@ -15,7 +15,7 @@ public class SpawnManager : MonoBehaviour
 
     void Update()
     {
-        enemiesCount = FindObjectsOfType<Enemy>().Length;
+        enemiesCount = FindObjectsByType<Enemy>(FindObjectsSortMode.None).Length;
         if (enemiesCount == 0) 
         {
             Instantiate(powerupPrefab, GenerateSpawnPosition(), powerupPrefab.transform.rotation);
