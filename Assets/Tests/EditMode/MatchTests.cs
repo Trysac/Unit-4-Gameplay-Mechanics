@@ -119,6 +119,18 @@ namespace RingOut.Core.Tests
         }
 
         [Test]
+        public void ARunCanOpenOnALaterWaveWithItsPlanAndArena()
+        {
+            var match = new Match(4, 11);
+
+            Assert.That(match.Wave, Is.EqualTo(11));
+            Assert.That(match.Plan.Enemies, Is.EqualTo(WavePlanner.Plan(11, 4).Enemies));
+            Assert.That(match.Shape.Layout, Is.EqualTo(ArenaLayout.Islands));
+            Assert.That(match.Alive, Is.EqualTo(match.Plan.Enemies.Count));
+            Assert.That(new Match(4, 0).Wave, Is.EqualTo(1));
+        }
+
+        [Test]
         public void TheSameSeedPlaysTheSameWaves()
         {
             var a = new Match(77);

@@ -4,7 +4,7 @@ namespace RingOut.Core
     public static class Push
     {
         /// <summary>The knockback power-up's hit on contact.</summary>
-        public const float KnockbackStrength = 16f;
+        public const float KnockbackStrength = 20f;
         /// <summary>The dash, along the move direction.</summary>
         public const float DashStrength = 9f;
         /// <summary>The smash shockwave at its centre, and how far it reaches.</summary>

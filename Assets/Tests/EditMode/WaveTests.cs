@@ -119,9 +119,9 @@ namespace RingOut.Core.Tests
         }
 
         [TestCase(1, 1f)]
-        [TestCase(2, 1.05f)]
-        [TestCase(13, 1.6f)]
-        [TestCase(50, 1.6f)]
+        [TestCase(2, 1.03f)]
+        [TestCase(13, 1.36f)]
+        [TestCase(50, 1.36f)]
         public void TheChaseGetsStrongerEachWaveUpToACap(int wave, float scale)
         {
             Assert.That(EnemyCatalog.ForceScale(wave), Is.EqualTo(scale).Within(1e-4f));

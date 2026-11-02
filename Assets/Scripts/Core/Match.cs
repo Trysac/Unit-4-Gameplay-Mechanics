@@ -65,10 +65,11 @@ namespace RingOut.Core
         readonly int seed;
         readonly List<MatchEvent> events = new List<MatchEvent>();
 
-        public Match(int seed)
+        /// <param name="firstWave">The wave to open on (1 for a normal run; tests and screenshots jump ahead).</param>
+        public Match(int seed, int firstWave = 1)
         {
             this.seed = seed;
-            BeginWave(1);
+            BeginWave(firstWave < 1 ? 1 : firstWave);
         }
 
         public int Seed => seed;

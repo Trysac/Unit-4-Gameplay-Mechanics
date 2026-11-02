@@ -42,8 +42,8 @@ namespace RingOut.Core
 
     public static class EnemyCatalog
     {
-        /// <summary>Every wave after the first makes the chase 5% stronger, up to +60% at wave 13.</summary>
-        public const float ForceGrowthPerWave = 0.05f;
+        /// <summary>Every wave after the first makes the chase 3% stronger, up to +36% at wave 13.</summary>
+        public const float ForceGrowthPerWave = 0.03f;
         public const int GrowthStopsAtWave = 13;
 
         /// <summary>An impact above this impulse (N s) splits a splitter.</summary>
@@ -56,7 +56,7 @@ namespace RingOut.Core
         public static EnemyStats Base(EnemyKind kind) => kind switch
         {
             EnemyKind.Grunt => new EnemyStats(0.75f, 1f, 9f, 100),
-            EnemyKind.Fast => new EnemyStats(0.55f, 0.6f, 9.5f, 150),
+            EnemyKind.Fast => new EnemyStats(0.55f, 0.6f, 6.6f, 150),
             EnemyKind.Heavy => new EnemyStats(1.05f, 3f, 21f, 250),
             EnemyKind.Splitter => new EnemyStats(0.9f, 1.4f, 12f, 150),
             EnemyKind.Mini => new EnemyStats(0.5f, 0.5f, 5.5f, 50),
