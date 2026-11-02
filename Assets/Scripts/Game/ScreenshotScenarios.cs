@@ -144,7 +144,8 @@ namespace RingOut.Game
                     yield return Run(11, 2.6f);
                     break;
                 case "crumbling":
-                    yield return Run(16, 1.4f);
+                    // Wait out the countdown first: only the fight phase counts toward the crumble.
+                    yield return Run(16, 1.9f);
                     // Fast-forward the fight so the edge has crumbled in.
                     director.Match.Step(25f);
                     director.ScriptedMove = new Vector3(0.3f, 0f, -1f).normalized;
