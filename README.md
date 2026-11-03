@@ -20,6 +20,16 @@ Learn Junior Programmer pathway**, and was rebuilt on that idea as an original g
 | ![The crumbling island after its edge has receded](docs/screenshots/crumbling.png) | ![Results after falling off, with a new best score](docs/screenshots/results.png) |
 | ![How to play](docs/screenshots/howto.png) | |
 
+## Play it
+
+- **In your browser:** [trysac.github.io/Unit-4-Gameplay-Mechanics](https://trysac.github.io/Unit-4-Gameplay-Mechanics/)
+- **On itch.io:** [trysac.itch.io/ring-out](https://trysac.itch.io/ring-out)
+- **Get the code:** fork this repository, or clone it:
+
+  ```bash
+  git clone https://github.com/Trysac/Unit-4-Gameplay-Mechanics.git
+  ```
+
 ## Run it
 
 1. Install **Unity 6000.3.27f1 (Unity 6 LTS)** with Unity Hub (add the Windows or Web build
