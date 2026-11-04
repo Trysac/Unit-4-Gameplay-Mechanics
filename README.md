@@ -6,6 +6,8 @@ splitting enemies and a boss every fifth wave; three power-ups, a dash and four 
 a ring with a hole, twin islands and an island that crumbles while you fight) keep it moving.
 Plays with a keyboard, a gamepad or a touch screen.
 
+![Gameplay](docs/media/gameplay.gif)
+
 It started in 2021 as my take on **Prototype 4 from Unit 4 ("Gameplay Mechanics") of the Unity
 Learn Junior Programmer pathway**, and was rebuilt on that idea as an original game (see
 [Where it came from](#where-it-came-from)).
