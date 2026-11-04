@@ -13,6 +13,9 @@ namespace RingOut.Game
     /// (which have no command line) are unaffected. The same hook runs inside the editor
     /// (ProjectBuilder.CaptureScreenshots), which renders the camera and the HUD off screen and
     /// blends them, for machines that cannot run the player.
+    /// With <c>-frames N -fps F</c> each scenario is recorded instead as N numbered frames
+    /// (<c>&lt;folder&gt;/&lt;scenario&gt;/frame_0000.png</c>) at a fixed timestep of 1/F seconds;
+    /// the <c>gameplay</c> scenario plays a wave with a scripted player for the README GIF.
     /// </summary>
     public sealed class ScreenshotScenarios : MonoBehaviour
     {
@@ -25,6 +28,8 @@ namespace RingOut.Game
         RenderTexture sceneTarget;
         RenderTexture uiTarget;
         GameDirector director;
+        int frames;
+        int fps = 15;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void StartWhenRequested()
@@ -37,6 +42,11 @@ namespace RingOut.Game
             var host = new GameObject(nameof(ScreenshotScenarios)).AddComponent<ScreenshotScenarios>();
             host.folder = target;
             host.scenarios = (Argument("-scenario") ?? DefaultScenarios).Split(',');
+            int.TryParse(Argument("-frames"), out host.frames);
+            if (int.TryParse(Argument("-fps"), out int rate) && rate > 0)
+            {
+                host.fps = rate;
+            }
         }
 
         IEnumerator Start()
@@ -56,6 +66,13 @@ namespace RingOut.Game
                 director.ScriptedInput = false;
                 director.ScriptedMove = Vector3.zero;
                 yield return Stage(scenario);
+                if (frames > 0)
+                {
+                    yield return Record(scenario);
+                    Time.timeScale = 1f;
+                    director.ScriptedInput = false;
+                    continue;
+                }
                 Texture2D shot;
                 if (Application.isEditor)
                 {
@@ -169,9 +186,88 @@ namespace RingOut.Game
                     }
                     yield return new WaitForSecondsRealtime(0.7f);
                     break;
+                case "gameplay":
+                    yield return Run(3, 2.2f);
+                    director.Match.PowerUpCollected(PowerUpKind.Smash);
+                    yield return new WaitForSecondsRealtime(0.2f);
+                    break;
                 default:
                     Debug.LogWarning($"Unknown screenshot scenario '{scenario}'.");
                     break;
+            }
+        }
+
+        /// <summary>Writes <see cref="frames"/> frames of the scenario at a fixed timestep.</summary>
+        IEnumerator Record(string scenario)
+        {
+            string target = Path.Combine(folder, scenario);
+            Directory.CreateDirectory(target);
+            Time.captureFramerate = fps;
+            for (int i = 0; i < frames; i++)
+            {
+                if (scenario == "gameplay")
+                {
+                    PlayStep(i);
+                }
+                yield return null;
+                Texture2D shot;
+                if (Application.isEditor)
+                {
+                    shot = CaptureOffscreen();
+                }
+                else
+                {
+                    yield return new WaitForEndOfFrame();
+                    shot = ScreenCapture.CaptureScreenshotAsTexture();
+                }
+                File.WriteAllBytes(Path.Combine(target, $"frame_{i:0000}.png"), shot.EncodeToPNG());
+                Destroy(shot);
+            }
+            Time.captureFramerate = 0;
+            Debug.Log($"Saved {frames} frames of {scenario}");
+        }
+
+        /// <summary>
+        /// One frame of the scripted player: get between the arena centre and the nearest enemy,
+        /// then charge it outward, smash once early on and dash later, and back off the edge.
+        /// </summary>
+        void PlayStep(int frame)
+        {
+            PlayerBall player = director.Player;
+            if (player == null || director.Match == null || director.Match.IsOver)
+            {
+                return;
+            }
+            Vector3 at = player.transform.position;
+            at.y = 0f;
+            EnemyBall nearest = null;
+            float best = float.MaxValue;
+            foreach (EnemyBall enemy in director.Enemies)
+            {
+                if (enemy == null || enemy.Gone)
+                {
+                    continue;
+                }
+                float distance = Vector3.Distance(at, enemy.transform.position);
+                if (distance < best)
+                {
+                    best = distance;
+                    nearest = enemy;
+                }
+            }
+            Vector3 move = -at;
+            if (nearest != null && at.magnitude < 7.5f)
+            {
+                Vector3 foe = nearest.transform.position;
+                foe.y = 0f;
+                Vector3 outward = foe.sqrMagnitude > 0.01f ? foe.normalized : Vector3.forward;
+                bool inside = Vector3.Dot(at - foe, outward) < -0.6f;
+                move = (inside ? foe + outward * 2f : foe - outward * 2.2f) - at;
+            }
+            director.ScriptedMove = move.sqrMagnitude > 0.01f ? move.normalized : Vector3.zero;
+            if (frame == Mathf.RoundToInt(fps * 1.4f) || (frame > fps * 3f && frame % Mathf.RoundToInt(fps * 1.5f) == 0 && best < 3.5f))
+            {
+                director.Act();
             }
         }
 
